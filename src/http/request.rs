@@ -4,13 +4,13 @@ use std::error::Error;
 use std::fmt::{Display, Debug, Formatter, Result as FmtResult};
 use std::str::{from_utf8, Utf8Error };
 
-pub struct Request {
-  path: String,
-  query_string: Option<String>,
+pub struct Request<'buf> {
+  path: &'buf str,
+  query_string: Option<&'buf str>,
   method: Method,
 }
 
-impl TryFrom<&[u8]> for Request {
+impl<'buf> TryFrom<&[u8]> for Request<'buf> {
   type Error = ParseError;
 
   fn try_from(buf: &[u8]) -> Result<Self, Self::Error> {
